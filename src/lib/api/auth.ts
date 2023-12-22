@@ -1,7 +1,8 @@
 import axios from "axios";
+import * as type from "../../utils/types/auth";
+
 const baseURL = import.meta.env.VITE_baseURL;
 
-import * as type from "../../utils/types/auth";
 
 export const register = (body: type.registerBody) =>
   axios({

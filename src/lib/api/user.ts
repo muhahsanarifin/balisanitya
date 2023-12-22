@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import * as type from "../../utils/types/user";
 
 const baseURL = (baseURL: string): string => baseURL;
