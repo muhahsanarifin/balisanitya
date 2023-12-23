@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "react-rainbow-components";
 
 import { SiWhatsapp } from "react-icons/si";
 import {
@@ -64,12 +65,35 @@ export const WhatsApp: React.FC = () => {
 };
 
 type AuthProps = {
-  className: string;
-  value: string;
+  className?: string;
+  label?: string;
+  isLoading?: boolean;
+  type?: string;
+  variant?: string;
+  borderRadius?: string;
+  disabled?: boolean;
 };
 
-export const Auth: React.FC<AuthProps> = ({ value, className }) => {
-  return <input type="submit" value={value} className={className} />;
+export const Auth: React.FC<AuthProps> = ({
+  label = "Auth",
+  className,
+  isLoading,
+  type = "submit",
+  variant,
+  borderRadius,
+  disabled,
+}) => {
+  return (
+    <Button
+      isLoading={isLoading}
+      label={label}
+      variant={variant}
+      type={type}
+      className={className}
+      borderRadius={borderRadius}
+      disabled={disabled}
+    />
+  );
 };
 
 type PaginationProps = {
@@ -161,7 +185,7 @@ type resetProps = {
 export const Reset: React.FC<resetProps> = ({ onClick }) => {
   return (
     <button
-      className="inline-block rounded border border-teal-600 bg-teal-600 px-6 py-2 text-xs font-medium text-white hover:bg-transparent hover:text-teal-600 focus:outline-none focus:ring active:text-teal-500"
+      className="inline-block rounded border border-teal-600 bg-teal-600 px-6 py-2 text-xs font-medium text-white hover:bg-transparent hover:text-teal-600 focus:outline-none focus:ring-none active:text-teal-500"
       onClick={onClick}
     >
       Reset
@@ -228,7 +252,12 @@ export const Back: React.FC<BackProps> = ({ title, to }) => {
   );
 };
 
-export const Update: React.FC<AuthProps> = ({ value, className }) => {
+type UpdateProps = {
+  value: string;
+  className: string;
+};
+
+export const Update: React.FC<UpdateProps> = ({ value, className }) => {
   return <input type="submit" value={value} className={className} />;
 };
 

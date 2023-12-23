@@ -2,18 +2,27 @@ import React, { ReactNode } from "react";
 import { Modal } from "react-rainbow-components";
 
 type ModalBaseEmptyProps = {
-  children?: ReactNode;
+  footer?: ReactNode;
   isOpen?: boolean;
+  title?: string;
   onRequestClose?: () => void;
+  children: ReactNode;
 };
 
 export const ModalBaseEmpty: React.FC<ModalBaseEmptyProps> = ({
-  children,
+  title,
+  footer,
   isOpen,
   onRequestClose,
+  children,
 }) => {
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+    <Modal
+      title={title}
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      footer={footer}
+    >
       {children}
     </Modal>
   );

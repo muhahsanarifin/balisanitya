@@ -3,19 +3,25 @@ import * as api from "../../../lib/api/news";
 import * as type from "../../types/news";
 
 type getNewsProps = {
-  cbPending?: () => void;
-  cbFulfilled?: (data: any) => void;
-  cbFinally?: () => void;
+  cbGetNewsPending?: () => void;
+  cbGetNewsFulfilled?: (data: any) => void;
+  cbGetNewsFinally?: () => void;
   query?: string;
 };
 
 export const getNewsThunk = createAsyncThunk(
   "getNews",
-  async ({ cbPending, cbFulfilled, cbFinally, query }: getNewsProps) => {
+  async ({
+    cbGetNewsPending,
+    cbGetNewsFulfilled,
+    cbGetNewsFinally,
+    query,
+  }: getNewsProps) => {
     try {
-      typeof cbPending === "function" && cbPending();
+      typeof cbGetNewsPending === "function" && cbGetNewsPending();
       const response = await api.getNews(query);
-      typeof cbFulfilled === "function" && cbFulfilled(response.data);
+      typeof cbGetNewsFulfilled === "function" &&
+        cbGetNewsFulfilled(response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -24,25 +30,31 @@ export const getNewsThunk = createAsyncThunk(
         throw error;
       }
     } finally {
-      typeof cbFinally === "function" && cbFinally();
+      typeof cbGetNewsFinally === "function" && cbGetNewsFinally();
     }
   }
 );
 
 type getNewProps = {
-  cbPending?: () => void;
-  cbFulfilled?: (data: any) => void;
-  cbFinally?: () => void;
+  cbGetNewPending?: () => void;
+  cbGetNewFulfilled?: (data: any) => void;
+  cbGetNewFinally?: () => void;
   params: string;
 };
 
 export const getNewThunk = createAsyncThunk(
   "getNew",
-  async ({ cbPending, cbFulfilled, cbFinally, params }: getNewProps) => {
+  async ({
+    cbGetNewPending,
+    cbGetNewFulfilled,
+    cbGetNewFinally,
+    params,
+  }: getNewProps) => {
     try {
-      typeof cbPending === "function" && cbPending();
+      typeof cbGetNewPending === "function" && cbGetNewPending();
       const response = await api.getNew(params);
-      typeof cbFulfilled === "function" && cbFulfilled(response.data);
+      typeof cbGetNewFulfilled === "function" &&
+        cbGetNewFulfilled(response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -51,15 +63,15 @@ export const getNewThunk = createAsyncThunk(
         throw error;
       }
     } finally {
-      typeof cbFinally === "function" && cbFinally();
+      typeof cbGetNewFinally === "function" && cbGetNewFinally();
     }
   }
 );
 
 type createNewProps = {
-  cbPending: () => void;
-  cbFulfilled: (data: any) => void;
-  cbFinally: () => void;
+  cbCreateNewPending: () => void;
+  cbCreateNewFulfilled: (data: any) => void;
+  cbCreateNewFinally: () => void;
   body: type.createNewBody;
   token: type.token;
 };
@@ -67,16 +79,17 @@ type createNewProps = {
 export const createNewThunk = createAsyncThunk(
   "createNew",
   async ({
-    cbPending,
-    cbFulfilled,
-    cbFinally,
+    cbCreateNewPending,
+    cbCreateNewFulfilled,
+    cbCreateNewFinally,
     body,
     token,
   }: createNewProps) => {
     try {
-      typeof cbPending === "function" && cbPending();
+      typeof cbCreateNewPending === "function" && cbCreateNewPending();
       const response = await api.createNew(body, token);
-      typeof cbFulfilled === "function" && cbFulfilled(response.data);
+      typeof cbCreateNewFulfilled === "function" &&
+        cbCreateNewFulfilled(response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -85,15 +98,15 @@ export const createNewThunk = createAsyncThunk(
         throw error;
       }
     } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
+      typeof cbCreateNewFinally === "function" && cbCreateNewFinally();
+    }cbCreateNewFinally;
   }
 );
 
 type updateNewProps = {
-  cbPending?: () => void;
-  cbFulfilled?: (data: any) => void;
-  cbFinally?: () => void;
+  cbUpdateNewPending?: () => void;
+  cbUpdateNewFulfilled?: (data: any) => void;
+  cbUpdateNewFinally?: () => void;
   params: string;
   body: type.updateNewBody;
   token: type.token;
@@ -102,20 +115,20 @@ type updateNewProps = {
 export const updateNewThunk = createAsyncThunk(
   "updateNew",
   async ({
-    cbPending,
-    cbFulfilled,
-    cbFinally,
+    cbUpdateNewPending,
+    cbUpdateNewFulfilled,
+    cbUpdateNewFinally,
     params,
     body,
     token,
   }: updateNewProps) => {
     try {
-      typeof cbPending === "function" && cbPending();
+      typeof cbUpdateNewPending === "function" && cbUpdateNewPending();
       const response = await api.updateNew(params, body, token);
-      typeof cbFulfilled === "function" && cbFulfilled(response.data);
+      typeof cbUpdateNewFulfilled === "function" &&
+        cbUpdateNewFulfilled(response.data);
       return response.data;
     } catch (error: any) {
-
       console.log("Result: ", error.response);
       if (error.response) {
         throw JSON.stringify(error.response.data);
@@ -123,15 +136,15 @@ export const updateNewThunk = createAsyncThunk(
         throw error;
       }
     } finally {
-      typeof cbFinally === "function" && cbFinally();
+      typeof cbUpdateNewFinally === "function" && cbUpdateNewFinally();
     }
   }
 );
 
 type deleteNewProps = {
-  cbPending: () => void;
-  cbFulfilled: (data: any) => void;
-  cbFinally: () => void;
+  cbDeleteNewPending?: () => void;
+  cbDeleteNewFulfilled?: (data: any) => void;
+  cbDeleteNewFinally?: () => void;
   params: string;
   token: type.token;
 };
@@ -139,16 +152,17 @@ type deleteNewProps = {
 export const deleteNewThunk = createAsyncThunk(
   "deleteNew",
   async ({
-    cbPending,
-    cbFulfilled,
-    cbFinally,
+    cbDeleteNewPending,
+    cbDeleteNewFulfilled,
+    cbDeleteNewFinally,
     params,
     token,
   }: deleteNewProps) => {
     try {
-      typeof cbPending === "function" && cbPending();
+      typeof cbDeleteNewPending === "function" && cbDeleteNewPending();
       const response = await api.deleteNew(params, token);
-      typeof cbFulfilled === "function" && cbFulfilled(response.data);
+      typeof cbDeleteNewFulfilled === "function" &&
+        cbDeleteNewFulfilled(response.data);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -158,7 +172,7 @@ export const deleteNewThunk = createAsyncThunk(
         throw error;
       }
     } finally {
-      typeof cbFinally === "function" && cbFinally();
+      typeof cbDeleteNewFinally === "function" && cbDeleteNewFinally();
     }
   }
 );

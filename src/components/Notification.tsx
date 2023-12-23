@@ -75,16 +75,28 @@ export const Announcement: React.FC<AnnouncementProps> = ({
 };
 
 type greetingProps = {
-  msg: string;
+  title: string;
   description: string;
+  onClick?: () => void;
 };
 
-export const Greeting: React.FC<greetingProps> = ({ msg, description }) => {
+export const Greeting: React.FC<greetingProps> = ({
+  title,
+  description,
+  onClick,
+}) => {
   return (
-    <div className="mt-8">
-      <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{msg}</h1>
+    <div className="flex items-center justify-between gap-4 bg-gray-100 py-2 px-4 text-teal-600">
+      <p className="text-xs font-medium">
+        {title} <span className="inline-block underline">{description}</span>
+      </p>
 
-      <p className="mt-1.5 text-sm text-gray-500">{description}</p>
+      <button
+        className="flex items-center rounded border border-teal-600 px-4 py-2 text-teal-600 hover:bg-teal-600 hover:text-white focus:outline-none focus:ring-none active:bg-teal-500"
+        onClick={onClick}
+      >
+        <span className="text-xs font-medium">Accept</span>
+      </button>
     </div>
   );
 };

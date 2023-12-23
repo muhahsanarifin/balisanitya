@@ -1,12 +1,23 @@
 import React, { useState } from "react";
-import * as Input from "../components/Input";
 import { Link } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../utils/redux/store";
+import { authAction } from "../utils/redux/reducers/auth";
+
+import { RadioGroup } from "react-rainbow-components";
+import * as Input from "../components/Input";
 import * as Button from "../components/Button";
 import Image from "../helpers/LazyLoad";
 import * as Assets from "../utils/assets";
-import { RadioGroup } from "react-rainbow-components";
 
 export const SignIn: React.FC = () => {
+  const usAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = usAppDispatch();
+
+  // Login state
+  const login = useSelector((state: RootState) => state.auth.login);
+
   type handleLoginInputParams = {
     target: {
       name: string;
@@ -32,7 +43,13 @@ export const SignIn: React.FC = () => {
   const handleLoginSubmit = async (e: handleLoginSubmitProps) => {
     e.preventDefault();
 
-    setBody({ ...body, bu_email: "", bu_password: "" });
+    const cbFulfilled = () => {
+      setBody({ ...body, bu_email: "", bu_password: "" });
+
+      dispatch(authAction.clearLogin());
+    };
+
+    await dispatch(authAction.loginThunk({ body, cbFulfilled }));
   };
 
   const handleLogInputReset = () => {
@@ -78,15 +95,20 @@ export const SignIn: React.FC = () => {
                   value={body.bu_password}
                 />
 
-                <div className="mb-10">
+                <div className="mb-5">
                   <Button.Auth
-                    value="Login"
-                    className="rounded-md bg-teal-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-700 w-full cursor-pointer"
+                    label={"Login"}
+                    className={"w-full"}
+                    type={"submit"}
+                    variant={"neutral"}
+                    borderRadius={"semi-square"}
+                    isLoading={login?.isLoading ? true : false}
+                    disabled={Object.values(body).some((value) => value === "")}
                   />
                 </div>
                 {Object.values(body).some((value) => value !== "") ? (
                   <button
-                    className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block w-full"
+                    className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-medium text-teal-600 transition hover:text-teal-600/75 sm:block w-full"
                     onClick={handleLogInputReset}
                   >
                     Reset
@@ -119,6 +141,8 @@ export const SignIn: React.FC = () => {
 };
 
 export const SignUp: React.FC = () => {
+  const register = useSelector((state: RootState) => state.auth.register);
+
   type handleLoginInputParams = {
     target: {
       name: string;
@@ -239,15 +263,19 @@ export const SignUp: React.FC = () => {
                   />
                 </div>
 
-                <div className="mb-10">
+                <div className="mb-5">
                   <Button.Auth
-                    value="Login"
-                    className="rounded-md bg-teal-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-700 w-full cursor-pointer"
+                    label={"Register"}
+                    className={"w-full"}
+                    type={"submit"}
+                    variant={"neutral"}
+                    borderRadius={"semi-square"}
+                    isLoading={register?.isPending ? true : false}
                   />
                 </div>
                 {Object.values(body).some((value) => value !== "") ? (
                   <button
-                    className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block w-full"
+                    className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-medium text-teal-600 transition hover:text-teal-600/75 sm:block w-full"
                     onClick={handleRegInputReset}
                   >
                     Reset

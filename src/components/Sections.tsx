@@ -19,22 +19,17 @@ import Image from "../helpers/LazyLoad";
 import * as Card from "../components/Card";
 import * as Button from "../components/Button";
 import * as Input from "../components/Input";
+import * as scroll from "../helpers/scroll";
 
 export const Banner: React.FC = () => {
   const { y } = useWindowScroll();
 
   const handleToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    scroll.to(0);
   };
 
   const handleToButtom = () => {
-    window.scrollTo({
-      top: 1579,
-      behavior: "smooth",
-    });
+    scroll.to(1719);
   };
 
   return (
@@ -863,7 +858,7 @@ export const News: React.FC = () => {
   // Query News state
   const query = useSelector((state: RootState) => state.news.queryNews);
 
-    // Dispatch
+  // Dispatch
   useEffect(() => {
     const pagination = `page=${query.page}&limit=${query.limit}`;
 
@@ -1006,9 +1001,9 @@ export const News: React.FC = () => {
                     label="Update, Oldest"
                   />
                   <Option
-                    name="sort_by created_at & order desc"
-                    value="sort_by=created_at&order=DESC"
-                    label="Create, Newest"
+                    name="sort_by updated_at & order desc"
+                    value="sort_by=updated_at&order=DESC"
+                    label="Update, Newest"
                   />
                   <Option
                     name="sort_by created_at & order asc"

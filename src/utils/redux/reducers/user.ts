@@ -40,12 +40,23 @@ const initialState: userState = {
     data: null,
     err: null,
   },
+  // Terms & Conditions, Privacy Policy
+  rules: {
+    isAccepted: false,
+  },
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    rules: (prevState, action) => {
+      return {
+        ...prevState,
+        rules: action.payload,
+      };
+    },
+  },
   extraReducers: (builder) => {
     // Get Profile
     builder.addCase(getProfileThunk.pending, (prevState) => {

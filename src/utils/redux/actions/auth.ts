@@ -30,9 +30,9 @@ export const registerThunk = createAsyncThunk(
 );
 
 type loginActionProp = {
-  cbPending: () => void;
-  cbFulfilled: (data: any) => void;
-  cbFinally: () => void;
+  cbPending?: () => void;
+  cbFulfilled?: (data: any) => void;
+  cbFinally?: () => void;
   body: type.loginBody;
 };
 
@@ -57,9 +57,9 @@ export const loginThunk = createAsyncThunk(
 );
 
 type logoutActionProp = {
-  cbPending: () => void;
-  cbFulfilled: (data: any) => void;
-  cbFinally: () => void;
+  cbPending?: () => void;
+  cbFulfilled?: (data: any) => void;
+  cbFinally?: () => void;
   token: string;
 };
 

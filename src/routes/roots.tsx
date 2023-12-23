@@ -6,6 +6,7 @@ import * as News from "../pages/news";
 import About from "../pages/about";
 import MetaTitle from "../components/MetaTitle";
 import Error from "../pages/error";
+import * as Handle from "../helpers/access";
 
 const roots = [
   {
@@ -19,7 +20,7 @@ const roots = [
   {
     path: "/home/admin",
     element: (
-      <MetaTitle title="Admin Home" content="Admin Home">
+      <MetaTitle title="Home" content="Admin Home">
         <Home />
       </MetaTitle>
     ),
@@ -27,20 +28,30 @@ const roots = [
   {
     path: "/auth/login/admin",
     element: (
-      <MetaTitle title="Admin Login" content="Admin Login">
-        <Login.Admin />
-      </MetaTitle>
+      <Handle.PreventBackHistory>
+        <MetaTitle title="Login" content="Admin Login">
+          <Login.Admin />
+        </MetaTitle>
+      </Handle.PreventBackHistory>
     ),
   },
   {
     path: "/auth/register/admin",
     element: (
-      <MetaTitle title="Admin Register" content="Admin Register">
+      <MetaTitle title="Register" content="Admin Register">
         <Register.Admin />
       </MetaTitle>
     ),
   },
   // Services
+  {
+    path: "/services/admin",
+    element: (
+      <MetaTitle title="Services View" content="Services View">
+        <Services.View />
+      </MetaTitle>
+    ),
+  },
   {
     path: "/services",
     element: (
@@ -52,9 +63,11 @@ const roots = [
   {
     path: "/services/create",
     element: (
-      <MetaTitle title="Services Create" content="Services Create">
-        <Services.Create />
-      </MetaTitle>
+      <Handle.PreventDirect>
+        <MetaTitle title="Services Create" content="Services Create">
+          <Services.Create />
+        </MetaTitle>
+      </Handle.PreventDirect>
     ),
   },
   {
@@ -67,6 +80,14 @@ const roots = [
   },
   // News
   {
+    path: "/news/admin",
+    element: (
+      <MetaTitle title="News View" content="News View">
+        <News.View />
+      </MetaTitle>
+    ),
+  },
+  {
     path: "/news",
     element: (
       <MetaTitle title="News View" content="News View">
@@ -77,9 +98,11 @@ const roots = [
   {
     path: "/news/create",
     element: (
-      <MetaTitle title="News Create" content="News Create">
-        <News.Create />
-      </MetaTitle>
+      <Handle.PreventDirect>
+        <MetaTitle title="News Create" content="News Create">
+          <News.Create />
+        </MetaTitle>
+      </Handle.PreventDirect>
     ),
   },
   {
@@ -87,6 +110,14 @@ const roots = [
     element: (
       <MetaTitle title="News Detail" content="News Detail">
         <News.Detail />
+      </MetaTitle>
+    ),
+  },
+  {
+    path: "/About/admin",
+    element: (
+      <MetaTitle title="About" content="About">
+        <About />
       </MetaTitle>
     ),
   },

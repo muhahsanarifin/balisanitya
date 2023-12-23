@@ -80,6 +80,18 @@ const newsSlice = createSlice({
         confirmNews: action.payload,
       };
     },
+    clearGetNew: (prevState) => {
+      return {
+        ...prevState,
+        getNew: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
     clearUpdateNew: (prevState) => {
       return {
         ...prevState,
@@ -92,6 +104,18 @@ const newsSlice = createSlice({
         },
       };
     },
+    clearDeleteNew: (prevState) => {
+      return {
+        ...prevState,
+        deleteNew: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    }
   },
   extraReducers: (builder) => {
     // Create new

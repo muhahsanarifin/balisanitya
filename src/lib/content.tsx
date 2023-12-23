@@ -5,9 +5,9 @@ export const Header = {
   alt: "Balisanitya",
   image: Assets.Image.BSS,
   lists: [
-    { id: 1, title: "Services", path: "/services" },
-    { id: 2, title: "News", path: "/news" },
-    { id: 3, title: "About", path: "/about" },
+    { id: 1, title: "Services", path: ["/services", "/services/admin"] },
+    { id: 2, title: "News", path: ["/news", "/news/admin"] },
+    { id: 3, title: "About", path: ["/about", "/about/admin"] },
   ],
 };
 

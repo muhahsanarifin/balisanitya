@@ -23,21 +23,25 @@ export const News: React.FC = () => {
   const getNews = useSelector((state: RootState) => state.news.getNews);
 
   const handleNewsDetail = async (bnew: { bun_id: any }) => {
-    const cbFulfilled = () => {
+    const cbGetNewFulfilled = () => {
       navigate(`/news/detail/${bnew.bun_id}`, { preventScrollReset: true });
     };
 
     await dispatch(
-      newsAction.getNewThunk({ params: `/${bnew.bun_id}`, cbFulfilled })
+      newsAction.getNewThunk({ params: `/${bnew.bun_id}`, cbGetNewFulfilled })
     );
   };
 
   return (
     <>
       {getNews.isLoading ? (
-        <Loader />
+        <div className="mt-8 flex-1 h-[50vh] flex items-center">
+          <Loader />
+        </div>
       ) : !getNews?.data?.data?.length ? (
-        <Feed.NotFound msg={getNews?.data?.msg} />
+        <div className="mt-8 flex-1 h-[50vh] flex items-center">
+          <Feed.NotFound msg={getNews?.data?.msg} />
+        </div>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xs:w-full">
           {getNews?.data?.data?.map((bnew: any) => (
@@ -97,6 +101,7 @@ export const News: React.FC = () => {
   );
 };
 
+// News Detail
 export const NewsDetail: React.FC = () => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
@@ -107,8 +112,8 @@ export const NewsDetail: React.FC = () => {
   // Confirm news state
   const confirmNews = useSelector((state: RootState) => state.news.confirmNews);
 
-  // User state
-  const getUser = useSelector((state: RootState) => state.user.getProfile);
+  // Login state
+  const login = useSelector((state: RootState) => state.auth.login);
 
   // Update & Delete
   const handleClickGoToUpdate = async () => {
@@ -119,11 +124,13 @@ export const NewsDetail: React.FC = () => {
     await dispatch(categoryAction.getCategoryThunk({ cbFulfilled }));
   };
 
-  const handleClickGoToDelete = () => {};
+  const handleClickGoToDelete = () => {
+    dispatch(newsAction.confirmNews({ ...confirmNews, isDeleted: true }));
+  };
 
   return (
     <article className="relative my-8 rounded-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 p-0.5 shadow-xl lg:w-1/2 sm:w-full xs:w-full">
-      {["admin", "owner"].includes(getUser?.data?.data?.role) ? (
+      {["admin", "owner"].includes(login?.data?.data?.bu_role) ? (
         <Button.GoToUpdateOrDelete
           deleteIconClassName={"text-red-600 h-4 w-4"}
           updateIconClassName={"text-teal-600 h-4 w-4"}
@@ -165,6 +172,7 @@ export const NewsDetail: React.FC = () => {
   );
 };
 
+// News Update
 export const NewsUpdate: React.FC = () => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
@@ -199,24 +207,28 @@ export const NewsUpdate: React.FC = () => {
   const handleUpdateSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const cbFulfilled = async () => {
-      await Promise.resolve(dispatch(newsAction.clearUpdateNew()));
+    const cbUpdateNewFulfilled = async () => {
+      const cbGetNewFulfilled = async () => {
+        await Promise.resolve(
+          dispatch(newsAction.confirmNews({ ...confirmNews, isUpdated: false }))
+        );
 
-      const cbFulfilled = () => {
-        dispatch(newsAction.confirmNews({ ...confirmNews, isUpdated: false }));
+        setTimeout(() => {
+          dispatch(newsAction.clearUpdateNew());
+        }, 2000);
       };
 
       await dispatch(
         newsAction.getNewThunk({
           params: `/${getNew?.data?.data?.bun_id}`,
-          cbFulfilled,
+          cbGetNewFulfilled,
         })
       );
     };
 
-    dispatch(
+    await dispatch(
       newsAction.updateNewThunk({
-        cbFulfilled,
+        cbUpdateNewFulfilled,
         params: getNew?.data?.data?.bun_id,
         body,
         token: login?.data?.data?.bl_token,
@@ -314,6 +326,65 @@ export const NewsUpdate: React.FC = () => {
           ) : null}
         </div>
       </form>
+    </div>
+  );
+};
+
+// New Delete
+export const NewDelete: React.FC = () => {
+  const navigate = useNavigate();
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+
+  // Get login state
+  const login = useSelector((state: RootState) => state.auth.login);
+
+  // Get News state
+  const getNews = useSelector((state: RootState) => state.news.getNews);
+
+  // Query News state
+  const query = useSelector((state: RootState) => state.news.queryNews);
+
+  // Get new state
+  const getNew = useSelector((state: RootState) => state.news.getNew);
+
+  // Confirm news state
+  const confirmNews = useSelector((state: RootState) => state.news.confirmNews);
+
+  const handleDeleteNew = async () => {
+    const cbDeleteNewFulfilled = async () => {
+      await Promise.resolve(
+        dispatch(newsAction.confirmNews({ ...confirmNews, isDeleted: false }))
+      );
+
+      setTimeout(() => {
+        dispatch(newsAction.clearDeleteNew());
+        if (getNews?.data?.data?.length === 1) {
+          dispatch(newsAction.queryNews({ ...query, page: query.page - 1 }));
+        }
+        dispatch(newsAction.clearGetNew());
+
+        navigate("/news/admin", { replace: true });
+      }, 2000);
+    };
+
+    await dispatch(
+      newsAction.deleteNewThunk({
+        params: getNew?.data?.data?.bun_id,
+        token: login?.data?.data?.bl_token,
+        cbDeleteNewFulfilled,
+      })
+    );
+  };
+
+  return (
+    <div className="flex justify-end">
+      <button
+        className="inline-block rounded-md border border-red-600 px-4 py-2 text-sm text-red-600 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-none active:bg-red-500"
+        onClick={handleDeleteNew}
+      >
+        Delete
+      </button>
     </div>
   );
 };
